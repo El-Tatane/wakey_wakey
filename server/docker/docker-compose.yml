@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+    wakey:
+        container_name: ${WAKEY_CONTAINER_NAME}
+        build:
+            context: .
+            dockerfile: ${TYPE_DOCKERFILE}
+        volumes:
+            - ${WAKEY_PATH}:/app/
+            - ${PROTOS_PATH}:/proto/
+        ports:
+            - "${WAKEY_PATH_PORT}:50051"
+            - "${WAKEY_PATH_SSH_PORT}:22"
+        env_file:
+            - .env
+
+

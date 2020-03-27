@@ -1,0 +1,9 @@
+syntax = "proto3";
+package wakey;
+
+import "def_messages.proto";
+
+// service definition.
+service WakeyServer {
+  rpc PredictToServer(UploadImageRequest) returns (Result) {};
+}

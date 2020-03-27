@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+message UploadImageRequest{
+    bytes image = 1;
+}
+
+message Result{
+    bool is_closed = 1;
+}
