@@ -1,6 +1,8 @@
-FROM bycedric/expo-cli
+FROM node
 
-RUN apt-get -y update && apt-get install -y android-tools-adb
+RUN npm install -g react-nativ-cli
+RUN npm install -g create-react-native-app
+RUN npm install -g react-nativ-cli
 
 CMD yarn start
 #CMD tail -f /dev/null
