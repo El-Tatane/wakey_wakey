@@ -15,8 +15,6 @@ class WakeyServer(def_functions_pb2_grpc.WakeyServerServicer):
         with open("../img/image_{}.jpg".format(rdm), "wb") as img:
             img.write(request.image)
 
-
-
         return def_messages_pb2.Result(is_closed=True)
 
 
