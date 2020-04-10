@@ -1,5 +1,8 @@
 import React from 'react'
 import {Text, View, StyleSheet, Picker} from 'react-native'
+import Meteo from "./components/Meteo"
+import Actualite from "./components/Actualite"
+
 
 export default class App extends React.Component {
 
@@ -10,7 +13,6 @@ export default class App extends React.Component {
         }
     }
 
-
     setFlux(flux){
         this.setState({flux});
     }
@@ -18,9 +20,9 @@ export default class App extends React.Component {
     fluxSource(){
         switch(this.state.flux){
             case "Météo":
-                return <Text>Meteo</Text>
+                return <Meteo/>
             case "Actualité":
-                return <Text>Actualite</Text>
+                return <Actualite/>
             default:
                 throw "Etat de flux non reconnu";
         }
@@ -42,7 +44,7 @@ export default class App extends React.Component {
                         <Picker.Item label="Actualité" value="Actualité"/>
                     </Picker>
                 </View>
-                <View>
+                <View style={{margin: 16}}>
                     {this.fluxSource()}
                 </View>
             </View>
