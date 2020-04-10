@@ -1,5 +1,5 @@
 import React from "react"
-import {View, StyleSheet, Picker} from "react-native"
+import {View, Text, StyleSheet, Picker} from "react-native"
 
 /**
  * Menu barre en haut de l'écran qui permet de choisir le type de flux à visualiser
@@ -23,7 +23,8 @@ export default class  Menu extends React.Component{
             <View style={styles.debug}>
                 <Picker
                     selectedValue={this.state.flux}
-                    onValueChange={(itemValue, itemIndex) => this.setFlux(itemValue)}
+                    onValueChange={(itemValue, itemPosition) => this.setFlux(itemValue)}
+                    mode="dropdown"
                 >
                     <Picker.Item label="Météo" value="java"/>
                     <Picker.Item label="Actualité" value="Actualité"/>
@@ -38,9 +39,5 @@ const styles = StyleSheet.create({
     debug : {
         borderColor: "green",
         borderWidth: 2
-    },
-
-    text : {
-        fontSize: 32
     }
 });
