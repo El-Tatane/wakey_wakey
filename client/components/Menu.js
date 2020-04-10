@@ -1,23 +1,37 @@
-import React, { useState } from "react"
-import {View, Text, StyleSheet, Picker} from "react-native"
+import React from "react"
+import {View, StyleSheet, Picker} from "react-native"
 
 /**
  * Menu barre en haut de l'écran qui permet de choisir le type de flux à visualiser
  */
-export default function Menu(){
-    const [selectedValue, setSelectedValue] = useState("Météo");
+export default class  Menu extends React.Component{
 
-    return(
-        <View style={styles.debug}>
-            <Picker
-                selectedValue={selectedValue}
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-            >
-                <Picker.Item label="Météo" value="java"/>
-                <Picker.Item label="Actualité" value="Actualité"/>
-            </Picker>
-        </View>
-    )
+    constructor(props) {
+        super(props);
+        this.state = {
+            flux: "Météo"
+        }
+    }
+
+    setFlux(flux){
+        this.setState({flux});
+    }
+
+
+    render() {
+        return(
+            <View style={styles.debug}>
+                <Picker
+                    selectedValue={this.state.flux}
+                    onValueChange={(itemValue, itemIndex) => this.setFlux(itemValue)}
+                >
+                    <Picker.Item label="Météo" value="java"/>
+                    <Picker.Item label="Actualité" value="Actualité"/>
+                </Picker>
+            </View>
+        )
+    }
+
 }
 
 const styles = StyleSheet.create({
