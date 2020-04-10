@@ -9,7 +9,9 @@ export default class Actualite extends React.Component {
 
     render(){
         return(
-            <Text>Actualité</Text>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text>Actualité</Text>
+            </View>
         )
     }
 

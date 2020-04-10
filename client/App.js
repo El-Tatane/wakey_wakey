@@ -2,7 +2,11 @@ import React from 'react'
 import {View, StyleSheet, Picker, StatusBar} from 'react-native'
 import Meteo from "./components/Meteo"
 import Actualite from "./components/Actualite"
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
+
+const Tab = createMaterialTopTabNavigator();
 
 export default class App extends React.Component {
 
@@ -38,38 +42,12 @@ export default class App extends React.Component {
      */
     render() {
         return(
-            <View>
-
-                { /* Force l'affichage de la barre d'outils et met un espace pour empêcher la superposition */ }
-                <StatusBar hidden={false}></StatusBar>
-
-
-                { /* Application */ }
-
-                <View style={styles.debug}>
-
-                    { /* Menu de choix du flux d'information */ }
-                    <Picker
-                        selectedValue={this.state.flux}
-                        onValueChange={(itemValue, itemPosition) => {
-                            this.setFlux(itemValue);
-                            console.log("Change flux to " + itemValue);
-                        }}
-                        mode="dropdown"
-                    >
-                        <Picker.Item label="Météo" value="Météo"/>
-                        <Picker.Item label="Actualité" value="Actualité"/>
-                    </Picker>
-                </View>
-
-                <View style={{margin: 16}}>
-
-                    { /* Affichage du flux */ }
-                    {this.fluxSource()}
-
-                </View>
-
-            </View>
+            <NavigationContainer>
+                <Tab.Navigator>
+                    <Tab.Screen name="Météo" component={Meteo} />
+                    <Tab.Screen name="Actualité" component={Actualite} />
+                </Tab.Navigator>
+            </NavigationContainer>
         )
     }
 

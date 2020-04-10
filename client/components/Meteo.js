@@ -9,7 +9,10 @@ export default class Meteo extends React.Component {
 
     render(){
         return(
-            <Text>Météo</Text>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text>Météo</Text>
+            </View>
+
         )
     }
 
