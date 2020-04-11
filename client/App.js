@@ -1,41 +1,90 @@
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import * as React from 'react';
+import { Button, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import WeatherApp from './components/WeatherApi';
+import NewsApp from './components/NewsApi';
+import TechnoApp from './components/TechnoApi';
 
-export default function App() {
+
+function HomeScreen({ navigation }) {
     return (
-        <View style={styles.container}>
-            <Image source={{ uri: 'https://i.imgur.com/TkIrScD.png' }} style={styles.logo} />
-            {/*<Image source={require('./image/robot_clock.png')}style={styles.logo} />*/}
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text>Home Screen</Text>
+            <Button
+                title="Weather"
+                onPress={() => navigation.navigate('Weather')}
+            />
 
-            <Text style={styles.instructions}>
-                WELECOME to sleep recognition application!
-            </Text>
+            <Button
+                title="Football"
+                onPress={() => navigation.navigate('Football')}
+            />
 
-            <TouchableOpacity
-                onPress={() => alert('Coronavirus, shit is real !')}
-                style={{ backgroundColor: 'blue' }}>
-                <Text style={{ fontSize: 20, color: '#fff' }}>News</Text>
-            </TouchableOpacity>
+            <Button
+                title="News"
+                onPress={() => navigation.navigate('News')}
+            />
+
+            <Button
+                title="Techno"
+                onPress={() => navigation.navigate('Techno')}
+            />
+
         </View>
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    logo: {
-        width: 305,
-        height: 159,
-        marginBottom: 20,
-    },
-    instructions: {
-        color: '#888',
-        fontSize: 18,
-        marginHorizontal: 15,
-        marginBottom: 10,
-    },
-});
+function WeatherScreen({ navigation }) {
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>Weather Screen</Text>
+            <WeatherApp city='London'/>
+        </View>
+
+    );
+}
+
+function FootballScreen({ navigation }) {
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>Football Screen</Text>
+        </View>
+    );
+}
+
+function NewsScreen({ navigation }) {
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>News Screen</Text>
+            <NewsApp/>
+        </View>
+    );
+}
+
+function TechnoScreen({ navigation }) {
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>Techno Screen</Text>
+            <TechnoApp/>
+        </View>
+    );
+}
+
+const Stack = createStackNavigator();
+
+function App() {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Weather" component={WeatherScreen} />
+                <Stack.Screen name="Football" component={FootballScreen} />
+                <Stack.Screen name="News" component={NewsScreen} />
+                <Stack.Screen name="Techno" component={TechnoScreen} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
+
+export default App;
