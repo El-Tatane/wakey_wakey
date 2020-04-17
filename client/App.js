@@ -1,9 +1,12 @@
 import React from 'react'
-import {View, StyleSheet, Picker, StatusBar} from 'react-native'
+import {View, StyleSheet, StatusBar, Text, Button } from 'react-native'
 import Meteo from "./components/Meteo"
 import Actualite from "./components/Actualite"
-import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { NavigationContainer } from '@react-navigation/native'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { Camera } from 'expo-camera'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import * as FileSystem from 'expo-file-system';
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -13,12 +16,23 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            flux: "Météo"
+            flux: "Météo",
+            hasPermission: null,
+            cameraReady: false,
+            image: <Text>placeholder</Text>
         }
     }
 
     setFlux(flux){
         this.setState({flux});
+    }
+
+    setHasPermission(hasPermission){
+        this.setState({hasPermission});
+    }
+
+    setCameraReady(cameraReady){
+        this.setState({cameraReady});
     }
 
     /**
@@ -41,23 +55,73 @@ export default class App extends React.Component {
      * Fonction de rendu
      */
     render() {
-        return(
-            <NavigationContainer>
-                <Tab.Navigator>
-                    <Tab.Screen name="Météo" component={Meteo} />
-                    <Tab.Screen name="Actualité" component={Actualite} />
-                </Tab.Navigator>
-            </NavigationContainer>
-        )
-    }
 
+        let camera; // camera ref
+        
+        // get camera permission
+        (async () => {
+            const { status } = await Camera.requestPermissionsAsync();
+            this.setHasPermission(status === 'granted');
+        })()
+
+        // take a picture and store in cache, then read the photo as binary
+        async function takePicture(){
+            alert("Check expo console for debug info.");
+            let photo = await camera.takePictureAsync();
+            console.log(photo);
+            let img = await readPhotoAsBinaryAsync(photo.uri);
+            console.log("image as binary : ", img);
+        };
+
+        /**
+         * Read the photo at given uri as binary and returns a promises that gives the file.
+         * @param {*} uri the photo uri
+         */
+        async function readPhotoAsBinaryAsync(uri){
+            return FileSystem.readAsStringAsync(uri);
+        }
+
+        if (this.state.hasPermission === null) {
+            return <Text/>;
+        }
+
+        else if (this.state.hasPermission === false) {
+            // TODO : notice the user of the permission problem
+            return <Text>No access to camera</Text>;
+        }
+
+        else {
+
+            return(
+                <View style={{ flex: 1 }}>
+
+                    { /* INVISIBLE CAMERA */ }
+                    <Camera 
+                        type={Camera.Constants.Type.front}
+                        ref={ref => {camera = ref;}}
+                    >
+                    </Camera>
+
+                    { /* Correctly display the phone status bar */ }
+                    <StatusBar></StatusBar>
+
+                    { /* FOR DEBUG */ }
+                    <TouchableOpacity style={{alignItems: "center", marginTop: 5}}
+                        onPress={takePicture}>
+                        <Button title="Tap to take picture (debug)"/>
+                    </TouchableOpacity>
+
+                    { /* MAIN CONTAINER */ }
+                    <NavigationContainer>
+                        <Tab.Navigator>
+                            <Tab.Screen name="Météo" component={Meteo} />
+                            <Tab.Screen name="Actualité" component={Actualite} />
+                        </Tab.Navigator>
+                    </NavigationContainer>
+
+                </View>
+            )
+        }
+    }
 
 }
-
-const styles = StyleSheet.create({
-
-    debug: {
-        borderWidth: 2,
-        borderColor: "red"
-    }
-});
