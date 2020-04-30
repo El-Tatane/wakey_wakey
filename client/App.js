@@ -1,6 +1,6 @@
 import React from 'react'
 import {View, StyleSheet, StatusBar, Text, Button } from 'react-native'
-import Meteo from "./components/Meteo"
+import Weather from "./components/Weather"
 import Actualite from "./components/Actualite"
 import { NavigationContainer } from '@react-navigation/native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
@@ -42,7 +42,7 @@ export default class App extends React.Component {
     fluxSource(){
         switch(this.state.flux){
             case "Météo":
-                return <Meteo/>
+                return <Weather/>
             case "Actualité":
                 return <Actualite/>
             default:
@@ -57,7 +57,7 @@ export default class App extends React.Component {
     render() {
 
         let camera; // camera ref
-        
+
         // get camera permission
         (async () => {
             const { status } = await Camera.requestPermissionsAsync();
@@ -96,7 +96,7 @@ export default class App extends React.Component {
                 <View style={{ flex: 1 }}>
 
                     { /* INVISIBLE CAMERA */ }
-                    <Camera 
+                    <Camera
                         type={Camera.Constants.Type.front}
                         ref={ref => {camera = ref;}}
                     >
@@ -114,7 +114,7 @@ export default class App extends React.Component {
                     { /* MAIN CONTAINER */ }
                     <NavigationContainer>
                         <Tab.Navigator>
-                            <Tab.Screen name="Météo" component={Meteo} />
+                            <Tab.Screen name="Météo" component={Weather} />
                             <Tab.Screen name="Actualité" component={Actualite} />
                         </Tab.Navigator>
                     </NavigationContainer>
