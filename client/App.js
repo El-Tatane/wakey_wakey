@@ -11,6 +11,10 @@ import * as FileSystem from 'expo-file-system';
 
 const Tab = createMaterialTopTabNavigator();
 
+const SERVER_IP = "192.168.1.10";
+const SERVER_PORT = "8000";
+const SERVER_API = "http://" + SERVER_IP + ":" + SERVER_PORT;
+
 export default class App extends React.Component {
 
     constructor(props) {
@@ -71,7 +75,29 @@ export default class App extends React.Component {
             console.log(photo);
             let img = await readPhotoAsBinaryAsync(photo.uri);
             console.log("image as binary : ", img);
+            sendPicture(img);
         };
+
+        /**
+         * Send the picture to the prediction server
+         * @param {*} img 
+         */
+        async function sendPicture(img){
+            console.log("send picture to " + SERVER_API);
+            fetch('http://example.com', {
+            method: 'POST',
+            headers: {
+                Accept: 'text/plain',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                firstParam: 'yourValue',
+                secondParam: 'yourOtherValue',
+            }),
+            })
+            .then(response => console.log("on a une réponse"))
+            .catch(error => console.log("y'a une erreur"));
+        }
 
         /**
          * Read the photo at given uri as binary and returns a promises that gives the file.
