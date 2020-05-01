@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, StyleSheet, StatusBar, Text, Button } from 'react-native'
 import Meteo from "./components/Meteo"
-import Actualite from "./components/Actualite"
+import ApiLoader from "./components/ApiLoader"
 import { NavigationContainer } from '@react-navigation/native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Camera } from 'expo-camera'
@@ -55,13 +55,33 @@ export default class App extends React.Component {
         }
     }
 
+     ActualiteScreen({ navigation }) {
+        return (
+            <View style={{flex:1, flexDirection: 'row', marginBottom:3}}>
+                <ApiLoader api_url='http://newsapi.org/v2/top-headlines?country=fr&apiKey=db08c72f235949f199d933b86e05e541'/>
+            </View>
+
+        );
+    }
+
+     TechnoScreen({ navigation }) {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text>Techno Screen</Text>
+                <ApiLoader api_url='http://newsapi.org/v2/top-headlines?country=us&category=technology&apiKey=db08c72f235949f199d933b86e05e541'/>
+            </View>
+        );
+    }
+
+
+
     /**
      * Fonction de rendu
      */
     render() {
 
         let camera; // camera ref
-        
+
         // get camera permission
         (async () => {
             const { status } = await Camera.requestPermissionsAsync();
@@ -80,7 +100,7 @@ export default class App extends React.Component {
 
         /**
          * Send the picture to the prediction server
-         * @param {*} img 
+         * @param {*} img
          */
         async function sendPicture(img){
             console.log("send picture to " + SERVER_API);
@@ -122,7 +142,7 @@ export default class App extends React.Component {
                 <View style={{ flex: 1 }}>
 
                     { /* INVISIBLE CAMERA */ }
-                    <Camera 
+                    <Camera
                         type={Camera.Constants.Type.front}
                         ref={ref => {camera = ref;}}
                     >
@@ -141,10 +161,10 @@ export default class App extends React.Component {
                     <NavigationContainer>
                         <Tab.Navigator>
                             <Tab.Screen name="Météo" component={Meteo} />
-                            <Tab.Screen name="Actualité" component={Actualite} />
+                            <Tab.Screen name="Actualité" component={this.ActualiteScreen}/>
+                            <Tab.Screen name="Tech" component={this.TechnoScreen}/>
                         </Tab.Navigator>
                     </NavigationContainer>
-
                 </View>
             )
         }
