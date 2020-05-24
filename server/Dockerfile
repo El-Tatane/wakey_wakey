@@ -6,15 +6,12 @@ COPY requirements.txt /tmp/requirements.txt
 RUN apt-get -y update && \
     apt-get install -y python3-pip python3-openssl
 
-#RUN python3 -m pip install --upgrade pip && \
-#    python3 -m pip install --no-cache-dir -r /tmp/requirements.txt
-
-#COPY requirements.txt /tmp/requirements.txt
-RUN alias FaceLandmarkImg='/home/openface-build/build/bin/FaceLandmarkImg'
+RUN pip3 install -r /tmp/requirements.txt
+RUN echo 'alias FaceLandmarkImg="/home/openface-build/build/bin/FaceLandmarkImg"' >> ~/.bashrc
 
 
 # install pip, requirements
-ENTRYPOINT ["python", "/tmp/sleep.py"]
+ENTRYPOINT ["python3", "/app/src/web_server.py"]
 
 
 

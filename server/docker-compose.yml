@@ -8,10 +8,8 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ${WAKEY_PATH}:/app/
-            - ${PROTOS_PATH}:/proto/
         ports:
-            - "${WAKEY_PATH_PORT}:50051"
-            - "${WAKEY_PATH_SSH_PORT}:22"
+            - "${WAKEY_PATH_PORT}:80"
         env_file:
             - .env
 
