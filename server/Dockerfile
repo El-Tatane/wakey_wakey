@@ -1,12 +1,13 @@
 FROM algebr/openface:latest
 
 COPY ./src/sleep.py /tmp/sleep.py
+COPY requirements.txt /tmp/requirements.txt
 
 RUN apt-get -y update && \
     apt-get install -y python3-pip python3-openssl
 
-RUN python3 -m pip install --upgrade pip && \
-    python3 -m pip install --no-cache-dir -r /mon_repo/requirements.txt
+#RUN python3 -m pip install --upgrade pip && \
+#    python3 -m pip install --no-cache-dir -r /tmp/requirements.txt
 
 #COPY requirements.txt /tmp/requirements.txt
 RUN alias FaceLandmarkImg='/home/openface-build/build/bin/FaceLandmarkImg'

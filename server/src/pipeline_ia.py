@@ -73,4 +73,5 @@ def get_distance_eyes(hx, hy, bx, by):
     return abs(hy - by)
 
 
-
+if __name__ == "__main__":
+    print(pipeline("o_1.jpg"))
