@@ -5,7 +5,7 @@ services:
         container_name: ${WAKEY_CONTAINER_NAME}
         build:
             context: .
-            dockerfile: ${TYPE_DOCKERFILE}
+            dockerfile: Dockerfile
         volumes:
             - ${WAKEY_PATH}:/app/
             - ${PROTOS_PATH}:/proto/

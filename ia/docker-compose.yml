@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+    openface:
+        container_name: openface
+        image: openface/openface
+        volumes:
+            - D:\projets\wakey_wakey\ia\img:/img/
+            - D:\projets\wakey_wakey\ia\out:/home/openface-build/build/bin/processed

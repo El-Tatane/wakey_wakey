@@ -25,3 +25,6 @@ Il existe 2 types de Dockerfile : un pour dev et un pour la prod
 - Dans le cas du Dockerfile : il faut compiler les fichier .proto
     1. Rentrer dans le container ``docker exec -it wakey bash``
     2. Exécuter la commande ``/app/utils/start_server.sh``
+    
+## lecture
+    https://github.com/TadasBaltrusaitis/OpenFace/wiki/Output-Format

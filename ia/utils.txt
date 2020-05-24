@@ -1,0 +1,2 @@
+/home/openface-build/build/bin/processed
+/home/openface-build/build/bin

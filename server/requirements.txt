@@ -2,4 +2,3 @@ grpcio==1.27.1
 grpcio-tools==1.27.1
 PyYAML==5.3
 pandas==1.0.1
-pytest==5.4.1
