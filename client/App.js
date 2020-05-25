@@ -11,9 +11,9 @@ import * as FileSystem from 'expo-file-system';
 
 const Tab = createMaterialTopTabNavigator();
 
-const SERVER_IP = "192.168.1.10";
-const SERVER_PORT = "8000";
-const SERVER_API = "http://" + SERVER_IP + ":" + SERVER_PORT;
+const SERVER_IP = "192.168.1.23";
+const SERVER_PORT = "80";
+const SERVER_API = "http://" + SERVER_IP + ":" + SERVER_PORT + "/image";
 
 export default class App extends React.Component {
 
@@ -93,30 +93,27 @@ export default class App extends React.Component {
             alert("Check expo console for debug info.");
             let photo = await camera.takePictureAsync();
             console.log(photo);
-            let img = await readPhotoAsBinaryAsync(photo.uri);
-            console.log("image as binary : ", img);
-            sendPicture(img);
+            sendPicture(photo.uri);
         };
 
-        /**
-         * Send the picture to the prediction server
-         * @param {*} img
-         */
-        async function sendPicture(img){
+        async function sendPicture(uri){
             console.log("send picture to " + SERVER_API);
-            fetch('http://example.com', {
-            method: 'POST',
-            headers: {
-                Accept: 'text/plain',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                firstParam: 'yourValue',
-                secondParam: 'yourOtherValue',
-            }),
-            })
-            .then(response => console.log("on a une réponse"))
-            .catch(error => console.log("y'a une erreur"));
+
+            var form = new FormData();
+            form.append("file", {uri : uri, type : "image/jpg", name : "testname.jpg"});
+        
+            const config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+                body: form,
+            };
+        
+            fetch(SERVER_API, config)
+            .then(response => console.log("y'a eu une réponse"))
+            .catch(error => console.log("y'a une erreur" + error));
         }
 
         /**
