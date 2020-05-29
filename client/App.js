@@ -1,6 +1,6 @@
 import React from 'react'
 import {View, StyleSheet, StatusBar, Text, Button } from 'react-native'
-import Meteo from "./components/Meteo"
+import Weather from "./components/Weather"
 import ApiLoader from "./components/ApiLoader"
 import { NavigationContainer } from '@react-navigation/native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
@@ -20,7 +20,7 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            flux: "Météo",
+            flux: "Weather",
             hasPermission: null,
             cameraReady: false,
             image: <Text>placeholder</Text>
@@ -45,8 +45,8 @@ export default class App extends React.Component {
      */
     fluxSource(){
         switch(this.state.flux){
-            case "Météo":
-                return <Meteo/>
+            case "Weather":
+                return <Weather/>
             case "Actualité":
                 return <Actualite/>
             default:
@@ -101,7 +101,7 @@ export default class App extends React.Component {
 
             var form = new FormData();
             form.append("file", {uri : uri, type : "image/jpg", name : "testname.jpg"});
-        
+
             const config = {
                 method: 'POST',
                 headers: {
@@ -110,7 +110,7 @@ export default class App extends React.Component {
                 },
                 body: form,
             };
-        
+
             fetch(SERVER_API, config)
             .then(response => console.log("y'a eu une réponse"))
             .catch(error => console.log("y'a une erreur" + error));
@@ -157,7 +157,7 @@ export default class App extends React.Component {
                     { /* MAIN CONTAINER */ }
                     <NavigationContainer>
                         <Tab.Navigator>
-                            <Tab.Screen name="Météo" component={Meteo} />
+                            <Tab.Screen name="Météo" component={Weather} />
                             <Tab.Screen name="Actualité" component={this.ActualiteScreen}/>
                             <Tab.Screen name="Tech" component={this.TechnoScreen}/>
                         </Tab.Navigator>
