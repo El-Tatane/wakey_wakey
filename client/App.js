@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, StyleSheet, StatusBar, Text, Button } from 'react-native'
+import {View, StyleSheet, StatusBar, Text, Button, Vibration } from 'react-native'
 import Weather from "./components/Weather"
 import ApiLoader from "./components/ApiLoader"
 import { NavigationContainer } from '@react-navigation/native'
@@ -36,6 +36,12 @@ export default class App extends React.Component {
 
         this.takePicture = this.takePicture.bind(this);
         this.sendPicture = this.sendPicture.bind(this);
+
+        this.intervalPhotoTime = 4000;
+        this.intervalPhoto = setInterval(this.takePicture, this.intervalPhotoTime);
+
+        this.tryBeforeAlert = 3;
+        this.currentTryWithoutOpenEyes = 0;
     }
 
     setFlux(flux){
@@ -86,6 +92,10 @@ export default class App extends React.Component {
 
     // take a picture and store in cache, then read the photo as binary
     async takePicture(){
+        clearInterval(this.intervalPhoto);
+        this.intervalPhoto = null;
+        console.log("Clear interval");
+
         console.log("In takePicture, console = " + this.camera);
         console.log("And cameraRender = " + this.cameraRender);
         console.log("state = " + this.state);
@@ -113,23 +123,33 @@ export default class App extends React.Component {
         fetch(SERVER_API, config)
         .then(response => response.json())
         .then(data => {
+            this.currentTryWithoutOpenEyes++;
             switch(data["AU45_c"]){
                 case -1:
                     // yeux pas détectés
                     console.log("Yeux pas détectés");
+                    this.intervalPhoto = setInterval(this.takePicture, this.intervalPhotoTime);
                     break;
                 case 0:
                     // yeux ouverts
                     console.log("Yeux ouverts");
+                    this.intervalPhoto = setInterval(this.takePicture, this.intervalPhotoTime);
+                    this.currentTryWithoutOpenEyes = 0;
+                    Vibration.cancel();
                     break;
                 case 1:
                     // yeux fermés
                     console.log("Yeux fermés");
+                    this.intervalPhoto = setInterval(this.takePicture, this.intervalPhotoTime);
                     break;
                 default:
                     // valeur bug
                     console.log("Erreur sur la valeur de retour");
                     break;
+            }
+
+            if (this.currentTryWithoutOpenEyes >= this.tryBeforeAlert){
+                Vibration.vibrate(10000);
             }
         })
         .catch(error => console.log("y'a une erreur" + error));
