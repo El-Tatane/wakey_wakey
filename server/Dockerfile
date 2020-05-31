@@ -10,7 +10,6 @@ RUN pip3 install -r /tmp/requirements.txt
 RUN echo 'alias FaceLandmarkImg="/home/openface-build/build/bin/FaceLandmarkImg"' >> ~/.bashrc
 
 
-# install pip, requirements
 ENTRYPOINT ["python3", "/app/src/web_server.py"]
 
 
