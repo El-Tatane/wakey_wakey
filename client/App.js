@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, StyleSheet, StatusBar, Text, Button, Vibration } from 'react-native'
+import {View, StyleSheet, StatusBar, Text, Button, Vibration, ToastAndroid } from 'react-native'
 import Weather from "./components/Weather"
 import ApiLoader from "./components/ApiLoader"
 import { NavigationContainer } from '@react-navigation/native'
@@ -94,12 +94,7 @@ export default class App extends React.Component {
     async takePicture(){
         clearInterval(this.intervalPhoto);
         this.intervalPhoto = null;
-        console.log("Clear interval");
 
-        console.log("In takePicture, console = " + this.camera);
-        console.log("And cameraRender = " + this.cameraRender);
-        console.log("state = " + this.state);
-        alert("Check expo console for debug info.");
         let photo = await this.camera.takePictureAsync();
         console.log(photo);
         this.sendPicture(photo.uri);
@@ -129,6 +124,8 @@ export default class App extends React.Component {
                     // yeux pas détectés
                     console.log("Yeux pas détectés");
                     this.intervalPhoto = setInterval(this.takePicture, this.intervalPhotoTime);
+                    ToastAndroid.show("Vos yeux ne sont pas détectés par la caméra",
+                        ToastAndroid.LONG);
                     break;
                 case 0:
                     // yeux ouverts
@@ -149,7 +146,9 @@ export default class App extends React.Component {
             }
 
             if (this.currentTryWithoutOpenEyes >= this.tryBeforeAlert){
-                Vibration.vibrate(10000);
+                Vibration.cancel();
+                Vibration.vibrate([1500, 1500]);
+                ToastAndroid.showWithGravity("WAKE UP!", ToastAndroid.LONG, ToastAndroid.CENTER);
             }
         })
         .catch(error => console.log("y'a une erreur" + error));
