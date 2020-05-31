@@ -2,6 +2,7 @@ import os
 from csv import reader
 # import pandas as pd
 import warnings
+import shutil
 
 
 def pipeline(image_name):
@@ -14,9 +15,13 @@ def pipeline(image_name):
 
     """
 
-
     image_path = "/app/img/{file_name}".format(file_name=image_name)
     result_csv_path = "/app/result/{file_name}/".format(file_name=image_name)
+
+    # check for directory already used
+    if os.path.isdir(result_csv_path):
+        # folder already exists
+        shutil.rmtree(result_csv_path)
 
     command = "/home/openface-build/build/bin/FaceLandmarkImg -f {image_path} -out_dir {result_csv_path}".format(
             image_path=image_path,

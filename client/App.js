@@ -25,6 +25,17 @@ export default class App extends React.Component {
             cameraReady: false,
             image: <Text>placeholder</Text>
         }
+
+        this.camera = null;
+        this.cameraRender = 
+            <Camera
+                type={Camera.Constants.Type.front}
+                ref={ref => {this.camera = ref;}}
+            >
+            </Camera>;
+
+        this.takePicture = this.takePicture.bind(this);
+        this.sendPicture = this.sendPicture.bind(this);
     }
 
     setFlux(flux){
@@ -73,56 +84,67 @@ export default class App extends React.Component {
         );
     }
 
+    // take a picture and store in cache, then read the photo as binary
+    async takePicture(){
+        console.log("In takePicture, console = " + this.camera);
+        console.log("And cameraRender = " + this.cameraRender);
+        console.log("state = " + this.state);
+        alert("Check expo console for debug info.");
+        let photo = await this.camera.takePictureAsync();
+        console.log(photo);
+        this.sendPicture(photo.uri);
+    };
 
+    async sendPicture(uri){
+        console.log("send picture to " + SERVER_API);
+
+        var form = new FormData();
+        form.append("file", {uri : uri, type : "image/jpg", name : "testname.jpg"});
+
+        const config = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
+            },
+            body: form,
+        };
+
+        fetch(SERVER_API, config)
+        .then(response => response.json())
+        .then(data => {
+            switch(data["AU45_c"]){
+                case -1:
+                    // yeux pas détectés
+                    console.log("Yeux pas détectés");
+                    break;
+                case 0:
+                    // yeux ouverts
+                    console.log("Yeux ouverts");
+                    break;
+                case 1:
+                    // yeux fermés
+                    console.log("Yeux fermés");
+                    break;
+                default:
+                    // valeur bug
+                    console.log("Erreur sur la valeur de retour");
+                    break;
+            }
+        })
+        .catch(error => console.log("y'a une erreur" + error));
+    }
 
     /**
      * Fonction de rendu
      */
     render() {
 
-        let camera; // camera ref
-
         // get camera permission
         (async () => {
             const { status } = await Camera.requestPermissionsAsync();
             this.setHasPermission(status === 'granted');
         })()
-
-        // take a picture and store in cache, then read the photo as binary
-        async function takePicture(){
-            alert("Check expo console for debug info.");
-            let photo = await camera.takePictureAsync();
-            console.log(photo);
-            sendPicture(photo.uri);
-        };
-
-        async function sendPicture(uri){
-            console.log("send picture to " + SERVER_API);
-
-            var form = new FormData();
-            form.append("file", {uri : uri, type : "image/jpg", name : "testname.jpg"});
-
-            const config = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                },
-                body: form,
-            };
-
-            fetch(SERVER_API, config)
-            .then(response => console.log("y'a eu une réponse"))
-            .catch(error => console.log("y'a une erreur" + error));
-        }
-
-        /**
-         * Read the photo at given uri as binary and returns a promises that gives the file.
-         * @param {*} uri the photo uri
-         */
-        async function readPhotoAsBinaryAsync(uri){
-            return FileSystem.readAsStringAsync(uri);
-        }
 
         if (this.state.hasPermission === null) {
             return <Text/>;
@@ -138,19 +160,14 @@ export default class App extends React.Component {
             return(
                 <View style={{ flex: 1 }}>
 
-                    { /* INVISIBLE CAMERA */ }
-                    <Camera
-                        type={Camera.Constants.Type.front}
-                        ref={ref => {camera = ref;}}
-                    >
-                    </Camera>
+                    {this.cameraRender}
 
                     { /* Correctly display the phone status bar */ }
                     <StatusBar></StatusBar>
 
                     { /* FOR DEBUG */ }
                     <TouchableOpacity style={{alignItems: "center", marginTop: 5}}
-                        onPress={takePicture}>
+                        onPress={this.takePicture}>
                         <Button title="Tap to take picture (debug)"/>
                     </TouchableOpacity>
 
