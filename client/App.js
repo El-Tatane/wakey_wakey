@@ -185,14 +185,15 @@ export default class App extends React.Component {
                     <StatusBar></StatusBar>
 
                     { /* FOR DEBUG */ }
-                    <TouchableOpacity style={{alignItems: "center", marginTop: 5}}
+                    {/* <TouchableOpacity style={{alignItems: "center", marginTop: 5}}
                         onPress={this.takePicture}>
                         <Button title="Tap to take picture (debug)"/>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     { /* MAIN CONTAINER */ }
                     <NavigationContainer>
-                        <Tab.Navigator>
+                        <Tab.Navigator
+                            initialRouteName="Actualité">
                             <Tab.Screen name="Météo" component={Weather} />
                             <Tab.Screen name="Actualité" component={this.ActualiteScreen}/>
                             <Tab.Screen name="Tech" component={this.TechnoScreen}/>
