@@ -11,8 +11,8 @@ import * as FileSystem from 'expo-file-system';
 
 const Tab = createMaterialTopTabNavigator();
 
-const SERVER_IP = "192.168.1.23";
-const SERVER_PORT = "80";
+const SERVER_IP = "boudeville.fr";
+const SERVER_PORT = "50051";
 const SERVER_API = "http://" + SERVER_IP + ":" + SERVER_PORT + "/image";
 
 export default class App extends React.Component {
@@ -27,7 +27,7 @@ export default class App extends React.Component {
         }
 
         this.camera = null;
-        this.cameraRender = 
+        this.cameraRender =
             <Camera
                 type={Camera.Constants.Type.front}
                 ref={ref => {this.camera = ref;}}
