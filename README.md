@@ -6,7 +6,7 @@ Docker / Docker-compose
 Editeur de texte (atom,...)
 
 
-### Mise en place du server 
+### Mise en place du serveur 
 
 - Se rendre dans le path /server
 - Copier le fichier ``.env.dist`` en ``.env``
@@ -14,7 +14,7 @@ Editeur de texte (atom,...)
 - Dans ce répertoire exécuter ``docker-compose build`` puis 
 ``docker-compose up`` pour lancer le serveur
 
-Pour rentrer dans le container : 
+Pour rentrer dans le container (non nécessaire) : 
 ``docker exec -it wakey bash``
 
 
