@@ -1,2 +1,2 @@
-PyYAML==5.3
+PyYAML==5.4
 Flask==1.1.2
